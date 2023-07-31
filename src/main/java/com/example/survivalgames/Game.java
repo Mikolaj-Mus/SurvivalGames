@@ -1,4 +1,7 @@
 package com.example.survivalgames;
+
+import java.util.Scanner;
+
 public class Game {
 
     Champion champion;
@@ -9,14 +12,15 @@ public class Game {
         board = new Board(10);
         board.fulfillBoard();
         board.printBoard();
+        Scanner scanner = new Scanner(System.in);
 
-        while(board.checkWinner()) {
+        while(!board.checkWinner()) {
 
+            board.randMove();
+            System.out.println();
+            board.printBoard();
+            scanner.nextLine();
 
         }
-
-
     }
-
-
 }
