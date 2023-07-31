@@ -2,30 +2,50 @@ package com.example.survivalgames;
 
 public class Board {
 
-    private Champion[][] board;
+    private static Champion[][] board;
 
     public Board(int rows) {
         board = new Champion[rows][rows];
     }
 
-    public void fulfillBoard(Champion[][] board, Champion[] champions) {
-        int numOfChampion = 0;
+    public boolean checkWinner() {
+        int counter = 0;
+        for (Champion[] champions : board) {
+            for (Champion champion : champions) {
+                if (champion != null) {
+                    counter++;
+                }
+            }
+        }
+        return counter == 1;
+    }
+
+    public void fulfillBoard() {
+        int num = 0;
         for (int i = 0; i < board.length; i += 3) {
             for (int j = 0; j < board[i].length; j += 3) {
-                board[i][j] = champions[numOfChampion];
-                numOfChampion++;
+                board[i][j] = new Champion(num);
+                num++;
             }
-
         }
     }
 
-    public static void printBoard(Champion[][] board) {
+    public void printBoard() {
         for (int i = 0; i < board.length; i++) {
             System.out.println();
             for (int j = 0; j < board[i].length; j++) {
-                System.out.print(board[i][j] + " ");
+                if (board[i][j] == null) {
+                    System.out.print("---");
+                } else {
+                    System.out.print("-" + board[i][j].getId() + "-");
+                }
             }
         }
+    }
+
+    public void randMove() {
+
+
     }
 
     public Champion[][] getBoard() {
@@ -33,6 +53,6 @@ public class Board {
     }
 
     public void setBoard(Champion[][] board) {
-        this.board = board;
+        Board.board = board;
     }
 }
