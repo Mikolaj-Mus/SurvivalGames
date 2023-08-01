@@ -1,6 +1,5 @@
 package com.example.survivalgames;
 
-import java.util.Random;
 
 public class Board {
 
