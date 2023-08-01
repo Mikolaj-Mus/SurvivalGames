@@ -6,7 +6,7 @@ public class Champ {
     private int xCor;
     private int yCor;
     private int strength = 1;
-    private int direction = 'R';
+    private char direction = 'R';
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -50,7 +50,7 @@ public class Champ {
         return direction;
     }
 
-    public void setDirection(int direction) {
+    public void setDirection(char direction) {
         this.direction = direction;
     }
 }
