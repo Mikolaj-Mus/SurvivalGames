@@ -2,28 +2,17 @@ package com.example.survivalgames;
 
 
 public class ChampBoard {
-
-    private static Champ[] x;
-    private static Champ[] y;
+    private static Champ[][] board;
 
     public ChampBoard() {
-        x = new Champ[Mechanics.returnGAME_UNITS()];
-        y = new Champ[Mechanics.returnGAME_UNITS()];
+        board = new Champ[Mechanics.returnGAME_UNITS()][Mechanics.returnGAME_UNITS()];
     }
 
-    public static Champ[] getX() {
-        return x;
+    public static Champ[][] getBoard() {
+        return board;
     }
 
-    public static void setX(Champ[] x) {
-        ChampBoard.x = x;
-    }
-
-    public static Champ[] getY() {
-        return y;
-    }
-
-    public static void setY(Champ[] y) {
-        ChampBoard.y = y;
+    public static void setBoard(Champ[][] board) {
+        ChampBoard.board = board;
     }
 }

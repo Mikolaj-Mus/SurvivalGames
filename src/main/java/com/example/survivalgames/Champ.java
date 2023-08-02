@@ -2,15 +2,14 @@ package com.example.survivalgames;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
-import java.util.Random;
 
 public class Champ {
-
     private int id;
     private int xCor;
     private int yCor;
     private int strength = 1;
     private int direction;
+    private Color color;
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -19,7 +18,7 @@ public class Champ {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.ORANGE);
+        g.setColor(color);
         g.fillOval(xCor, yCor, Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
     }
 
@@ -27,18 +26,10 @@ public class Champ {
         direction = ThreadLocalRandom.current().nextInt(0, 4);
 
         switch (direction) {
-            case 0:
-                yCor -= Mechanics.returnUNIT_SIZE();
-                break;
-            case 1:
-                yCor += Mechanics.returnUNIT_SIZE();
-                break;
-            case 2:
-                xCor -= Mechanics.returnUNIT_SIZE();
-                break;
-            case 3:
-                xCor += Mechanics.returnUNIT_SIZE();
-                break;
+            case 0 -> yCor -= Mechanics.returnUNIT_SIZE();
+            case 1 -> yCor += Mechanics.returnUNIT_SIZE();
+            case 2 -> xCor -= Mechanics.returnUNIT_SIZE();
+            case 3 -> xCor += Mechanics.returnUNIT_SIZE();
         }
     }
 
@@ -78,7 +69,15 @@ public class Champ {
         return direction;
     }
 
-    public void setDirection(char direction) {
+    public void setDirection(int direction) {
         this.direction = direction;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
