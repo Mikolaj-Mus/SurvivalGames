@@ -14,18 +14,19 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_HEIGHT = 600;
     private static final int UNIT_SIZE = 60;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 1000;
+    private static final int DELAY = 1;
     private static Champ[] champTab;
     boolean running = false;
     Timer timer;
     Random random = new Random();
+    private static Set<String> occupiedPositions = new HashSet<>();
 
 
     Mechanics() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        createChamps(10);
+        createChamps(6);
         startGame();
     }
 
@@ -54,7 +55,6 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public void createChamps(int number) {
         champTab = new Champ[number];
-        Set<String> occupiedPositions = new HashSet<>();
 
         for (int i = 0; i < champTab.length; i++) {
             int x, y;
@@ -74,12 +74,16 @@ public class Mechanics extends JPanel implements ActionListener {
         return champTab;
     }
 
-    public void setChampTab(Champ[] champTab) {
-        this.champTab = champTab;
+    public static String getPositionKey(int x, int y) {
+        return x + "," + y;
     }
 
-    private String getPositionKey(int x, int y) {
-        return x + "," + y;
+    public static Set<String> getOccupiedPositions() {
+        return occupiedPositions;
+    }
+
+    public void setOccupiedPositions(Set<String> occupiedPositions) {
+        this.occupiedPositions = occupiedPositions;
     }
 
     public static int returnGAME_UNITS() {

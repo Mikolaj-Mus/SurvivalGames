@@ -1,4 +1,5 @@
 package com.example.survivalgames;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,29 +23,42 @@ public class Champ {
 
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillOval(xCor * Mechanics.returnUNIT_SIZE(), yCor*Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
+        g.fillOval(xCor * Mechanics.returnUNIT_SIZE(), yCor * Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
     }
-/*
-[0] - UP
-[1] - DOWN
-[2] - LEFT
-[3] - RIGHT
- */
-public void move() {
 
-    checkBorder();
-    do {
-        direction = ThreadLocalRandom.current().nextInt(0, 4);
-    } while (excludedDirection.contains(direction));
-    excludedDirection.clear();
+    /*
+    [0] - UP
+    [1] - DOWN
+    [2] - LEFT
+    [3] - RIGHT
+     */
+    public void move() {
 
-    switch (direction) {
-        case 0 -> yCor -= 1;
-        case 1 -> yCor += 1;
-        case 2 -> xCor -= 1;
-        case 3 -> xCor += 1;
+        checkBorder();
+        int newX;
+        int newY;
+
+        do {
+            do {
+                direction = ThreadLocalRandom.current().nextInt(0, 4);
+            } while (excludedDirection.contains(direction));
+            newX = xCor;
+            newY = yCor;
+
+            switch (direction) {
+                case 0 -> newY -= 1;
+                case 1 -> newY += 1;
+                case 2 -> newX -= 1;
+                case 3 -> newX += 1;
+            }
+        } while (Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(newX, newY)));
+        Mechanics.getOccupiedPositions().add(Mechanics.getPositionKey(newX,newY));
+        Mechanics.getOccupiedPositions().remove(Mechanics.getPositionKey(xCor, yCor));
+        xCor = newX;
+        yCor = newY;
+        excludedDirection.clear();
+
     }
-}
 
     public void checkBorder() {
         if (yCor == 0) {
