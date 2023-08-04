@@ -1,7 +1,11 @@
 package com.example.survivalgames;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
+
+import static com.example.survivalgames.ChampBoard.getBoard;
 
 public class Champ {
     private int id;
@@ -10,6 +14,7 @@ public class Champ {
     private int strength = 1;
     private int direction;
     private Color color;
+    private final List<Integer> excludedDirection = new ArrayList<>();
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -19,18 +24,43 @@ public class Champ {
 
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillOval(xCor, yCor, Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
+        g.fillOval(xCor * Mechanics.returnUNIT_SIZE(), yCor*Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
     }
-
+/*
+[0] - UP
+[1] - DOWN
+[2] - LEFT
+[3] - RIGHT
+ */
     public void move() {
+
+        checkBorder();
+        do {
         direction = ThreadLocalRandom.current().nextInt(0, 4);
+        } while (excludedDirection.contains(direction));
 
         switch (direction) {
-            case 0 -> yCor -= Mechanics.returnUNIT_SIZE();
-            case 1 -> yCor += Mechanics.returnUNIT_SIZE();
-            case 2 -> xCor -= Mechanics.returnUNIT_SIZE();
-            case 3 -> xCor += Mechanics.returnUNIT_SIZE();
+            case 0 -> yCor -= 1;
+            case 1 -> yCor += 1;
+            case 2 -> xCor -= 1;
+            case 3 -> xCor += 1;
         }
+    }
+
+    public List<Integer> checkBorder() {
+        if (yCor == 0) {
+            excludedDirection.add(0);
+        }
+        if (yCor == (int) Math.sqrt(Mechanics.returnGAME_UNITS()) - 1) {
+            excludedDirection.add(1);
+        }
+        if (xCor == 0) {
+            excludedDirection.add(2);
+        }
+        if (xCor == (int) Math.sqrt(Mechanics.returnGAME_UNITS()) - 1) {
+            excludedDirection.add(3);
+        }
+        return excludedDirection;
     }
 
     public int getId() {

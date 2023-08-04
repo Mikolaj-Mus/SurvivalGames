@@ -12,4 +12,18 @@ public class ChampBoard {
     public static void setCell (int i, int j, Champ value) {
         board[i][j] = value;
     }
+
+    public static void printBoard() {
+        for (int i = 0; i < getBoard().length; i++) {
+            System.out.println();
+            for (int j = 0; j < getBoard()[i].length; j++) {
+                if (getBoard()[i][j] == null) {
+                    System.out.print(0 + " ");
+                } else {
+                    System.out.print("X" + " ");
+                }
+            }
+        }
+        System.out.println();
+    }
 }

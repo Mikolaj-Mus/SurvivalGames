@@ -15,7 +15,7 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_HEIGHT = 600;
     private static final int UNIT_SIZE = 60;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 10000;
+    private static final int DELAY = 3000;
     private Champ[] champTab;
     boolean running = false;
     Timer timer;
@@ -42,7 +42,6 @@ public class Mechanics extends JPanel implements ActionListener {
         for (Champ champ : champTab) {
             champ.draw(g);
         }
-
     }
 
     public void drawLines(Graphics g) {
@@ -59,21 +58,11 @@ public class Mechanics extends JPanel implements ActionListener {
         for (int i = 0; i < champTab.length; i++) {
             int x = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(GAME_UNITS));
             int y = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(GAME_UNITS));
-            champTab[i] = new Champ(0, x * UNIT_SIZE, y * UNIT_SIZE);
+            champTab[i] = new Champ(0, x, y);
             champTab[i].setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
             setCell(y, x, champTab[i]);
         }
-        for (int i = 0; i < getBoard().length; i++) {
-            System.out.println();
-            for (int j = 0; j < getBoard()[i].length; j++) {
-                if (getBoard()[i][j] == null) {
-                    System.out.print(0 + " ");
-                } else {
-                    System.out.print("X" + " ");
-                }
-            }
-        }
-        System.out.println();
+
     }
 
     public static int returnGAME_UNITS() {
@@ -97,17 +86,7 @@ public class Mechanics extends JPanel implements ActionListener {
         for (Champ champ : champTab) {
             champ.move();
         }
-        for (int i = 0; i < getBoard().length; i++) {
-            System.out.println();
-            for (int j = 0; j < getBoard()[i].length; j++) {
-                if (getBoard()[i][j] == null) {
-                    System.out.print(0 + " ");
-                } else {
-                    System.out.print("X" + " ");
-                }
-            }
-        }
-        System.out.println();
+
         repaint();
     }
 
