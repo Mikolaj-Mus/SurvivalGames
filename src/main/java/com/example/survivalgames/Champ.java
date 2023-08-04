@@ -2,6 +2,7 @@ package com.example.survivalgames;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
@@ -24,7 +25,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE());
-        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE() + 8);
+        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE());
     }
 
     /*
@@ -47,15 +48,71 @@ public class Champ {
             direction = getRandomDirection();
 
             switch (direction) {
-                case 0 -> newY -= 1;
-                case 1 -> newY += 1;
-                case 2 -> newX -= 1;
-                case 3 -> newX += 1;
+                case 0:
+                    newY -= 1;
+                    break;
+                case 1:
+                    newY += 1;
+                    break;
+                case 2:
+                    newX -= 1;
+                    break;
+                case 3:
+                    newX += 1;
+                    break;
+                default:
+                    break;
             }
         } while (Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(newX, newY)));
 
         updatePosition(newX, newY);
     }
+
+    public void fight() {
+        if (hasAdjacentChampion(xCor, yCor)) {
+            fightAdjacentChampion(xCor, yCor);
+        }
+    }
+
+    private void fightAdjacentChampion(int x, int y) {
+        Champ winner = new Champ(0, 0, 0);
+        int loserId = -1;
+        for (Champ champion : Mechanics.getChampTab()) {
+            if (champion != this && isAdjacent(x, y, champion)) {
+                loserId = champion.getId();
+                winner = new Random().nextBoolean() ? this : champion;
+                break;
+            }
+        }
+        if (winner == this) {
+            // Usunięcie przegranego championa z tablicy
+            Champ[] newChampTab = new Champ[ Mechanics.getChampTab().length - 1 ];
+            int newIndex = 0;
+
+            for (Champ champion : Mechanics.getChampTab()) {
+                if (champion.getId() != loserId) {
+                    newChampTab[newIndex] = champion;
+                    newIndex++;
+                }
+            }
+
+            Mechanics.setChampTab(newChampTab); // Aktualizacja tablicy champTab
+        }
+    }
+
+    private boolean isAdjacent(int x, int y, Champ champion) {
+        int dx = Math.abs(x - champion.getxCor());
+        int dy = Math.abs(y - champion.getyCor());
+        return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+    }
+
+    private boolean hasAdjacentChampion(int x, int y) {
+        return Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x, y - 1)) ||
+                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x, y + 1)) ||
+                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x - 1, y)) ||
+                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x + 1, y));
+    }
+
 
     public void updatePosition(int newX, int newY) {
         Mechanics.getOccupiedPositions().add(Mechanics.getPositionKey(newX, newY));

@@ -10,9 +10,9 @@ import java.util.Set;
 
 public class Mechanics extends JPanel implements ActionListener {
 
-    private static final int SCREEN_WIDTH = 600;
-    private static final int SCREEN_HEIGHT = 600;
-    private static final int UNIT_SIZE = 60;
+    private static final int SCREEN_WIDTH = 800;
+    private static final int SCREEN_HEIGHT = 800;
+    private static final int UNIT_SIZE = 50;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     private static final int DELAY = 100;
     private static Champ[] champTab;
@@ -26,7 +26,7 @@ public class Mechanics extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        createChamps(6);
+        createChamps(99);
         startGame();
     }
 
@@ -38,7 +38,7 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawLines(g);
+//        drawLines(g);
         for (Champ champ : champTab) {
             champ.draw(g);
         }
@@ -68,6 +68,14 @@ public class Mechanics extends JPanel implements ActionListener {
 
             occupiedPositions.add(getPositionKey(x, y));
         }
+    }
+
+    public static void setChampTab(Champ[] champTab) {
+        Mechanics.champTab = champTab;
+    }
+
+    public static Champ[] getChampTab() {
+        return champTab;
     }
 
     public static String getPositionKey(int x, int y) {
@@ -102,6 +110,7 @@ public class Mechanics extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         for (Champ champ : champTab) {
             champ.move();
+            champ.fight();
         }
 
         repaint();
