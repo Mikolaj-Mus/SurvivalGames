@@ -24,6 +24,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.returnUNIT_SIZE(), yCor * Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
+        g.drawString(String.valueOf(id), xCor * Mechanics.returnUNIT_SIZE(), yCor * Mechanics.returnUNIT_SIZE() + 8);
     }
 
     /*
@@ -34,16 +35,16 @@ public class Champ {
      */
     public void move() {
 
-        checkBorder();
         int newX;
         int newY;
 
+        checkBorder();
+
         do {
-            do {
-                direction = ThreadLocalRandom.current().nextInt(0, 4);
-            } while (excludedDirection.contains(direction));
             newX = xCor;
             newY = yCor;
+
+            direction = getRandomDirection();
 
             switch (direction) {
                 case 0 -> newY -= 1;
@@ -52,12 +53,22 @@ public class Champ {
                 case 3 -> newX += 1;
             }
         } while (Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(newX, newY)));
-        Mechanics.getOccupiedPositions().add(Mechanics.getPositionKey(newX,newY));
+
+        updatePosition(newX, newY);
+    }
+
+    public void updatePosition(int newX, int newY) {
+        Mechanics.getOccupiedPositions().add(Mechanics.getPositionKey(newX, newY));
         Mechanics.getOccupiedPositions().remove(Mechanics.getPositionKey(xCor, yCor));
         xCor = newX;
         yCor = newY;
         excludedDirection.clear();
-
+    }
+    public int getRandomDirection() {
+        do {
+            direction = ThreadLocalRandom.current().nextInt(0, 4);
+        } while (excludedDirection.contains(direction));
+        return direction;
     }
 
     public void checkBorder() {

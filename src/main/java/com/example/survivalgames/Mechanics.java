@@ -14,7 +14,7 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_HEIGHT = 600;
     private static final int UNIT_SIZE = 60;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 1;
+    private static final int DELAY = 1000;
     private static Champ[] champTab;
     boolean running = false;
     Timer timer;
@@ -63,7 +63,7 @@ public class Mechanics extends JPanel implements ActionListener {
                 y = random.nextInt((int) Math.sqrt(GAME_UNITS));
             } while (occupiedPositions.contains(getPositionKey(x, y)));
 
-            champTab[i] = new Champ(0, x, y);
+            champTab[i] = new Champ(i, x, y);
             champTab[i].setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 
             occupiedPositions.add(getPositionKey(x, y));
