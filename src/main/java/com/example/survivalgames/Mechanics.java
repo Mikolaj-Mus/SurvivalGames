@@ -14,7 +14,7 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_HEIGHT = 600;
     private static final int UNIT_SIZE = 60;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 1000;
+    private static final int DELAY = 100;
     private static Champ[] champTab;
     boolean running = false;
     Timer timer;
@@ -70,10 +70,6 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
-    public static Champ[] getChampTab() {
-        return champTab;
-    }
-
     public static String getPositionKey(int x, int y) {
         return x + "," + y;
     }
@@ -86,11 +82,11 @@ public class Mechanics extends JPanel implements ActionListener {
         this.occupiedPositions = occupiedPositions;
     }
 
-    public static int returnGAME_UNITS() {
+    public static int getGAME_UNITS() {
         return GAME_UNITS;
     }
 
-    public static int returnUNIT_SIZE() {
+    public static int getUNIT_SIZE() {
         return UNIT_SIZE;
     }
 

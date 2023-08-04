@@ -2,7 +2,7 @@ package com.example.survivalgames;
 
 
 public class ChampBoard {
-    private static final Champ[][] board = new Champ[(int)Math.sqrt(Mechanics.returnGAME_UNITS())][(int)Math.sqrt(Mechanics.returnGAME_UNITS())];
+    private static final Champ[][] board = new Champ[(int)Math.sqrt(Mechanics.getGAME_UNITS())][(int)Math.sqrt(Mechanics.getGAME_UNITS())];
 
 
     public static Champ[][] getBoard() {

@@ -23,8 +23,8 @@ public class Champ {
 
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillOval(xCor * Mechanics.returnUNIT_SIZE(), yCor * Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE(), Mechanics.returnUNIT_SIZE());
-        g.drawString(String.valueOf(id), xCor * Mechanics.returnUNIT_SIZE(), yCor * Mechanics.returnUNIT_SIZE() + 8);
+        g.fillOval(xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE());
+        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE() + 8);
     }
 
     /*
@@ -64,6 +64,7 @@ public class Champ {
         yCor = newY;
         excludedDirection.clear();
     }
+
     public int getRandomDirection() {
         do {
             direction = ThreadLocalRandom.current().nextInt(0, 4);
@@ -75,13 +76,13 @@ public class Champ {
         if (yCor == 0) {
             excludedDirection.add(0);
         }
-        if (yCor == (int) Math.sqrt(Mechanics.returnGAME_UNITS()) - 1) {
+        if (yCor == (int) Math.sqrt(Mechanics.getGAME_UNITS()) - 1) {
             excludedDirection.add(1);
         }
         if (xCor == 0) {
             excludedDirection.add(2);
         }
-        if (xCor == (int) Math.sqrt(Mechanics.returnGAME_UNITS()) - 1) {
+        if (xCor == (int) Math.sqrt(Mechanics.getGAME_UNITS()) - 1) {
             excludedDirection.add(3);
         }
     }
