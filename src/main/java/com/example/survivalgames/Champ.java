@@ -25,7 +25,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE());
-        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE());
+//        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE());
     }
 
     /*
@@ -47,25 +47,22 @@ public class Champ {
 
             direction = getRandomDirection();
 
+            if (direction == 4) {
+                break;
+            }
+
             switch (direction) {
-                case 0:
-                    newY -= 1;
-                    break;
-                case 1:
-                    newY += 1;
-                    break;
-                case 2:
-                    newX -= 1;
-                    break;
-                case 3:
-                    newX += 1;
-                    break;
-                default:
-                    break;
+                case 0 -> newY -= 1;
+                case 1 -> newY += 1;
+                case 2 -> newX -= 1;
+                case 3 -> newX += 1;
+                default -> {}
             }
         } while (Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(newX, newY)));
 
-        updatePosition(newX, newY);
+        if (direction != 4) {
+            updatePosition(newX, newY);
+        }
     }
 
     public void fight() {
@@ -75,7 +72,7 @@ public class Champ {
     }
 
     private void fightAdjacentChampion(int x, int y) {
-        Champ winner = new Champ(0, 0, 0);
+        Champ winner = null;
         int loserId = -1;
         for (Champ champion : Mechanics.getChampTab()) {
             if (champion != this && isAdjacent(x, y, champion)) {
@@ -85,8 +82,7 @@ public class Champ {
             }
         }
         if (winner == this) {
-            // Usunięcie przegranego championa z tablicy
-            Champ[] newChampTab = new Champ[ Mechanics.getChampTab().length - 1 ];
+            Champ[] newChampTab = new Champ[Mechanics.getChampTab().length - 1];
             int newIndex = 0;
 
             for (Champ champion : Mechanics.getChampTab()) {
@@ -96,7 +92,7 @@ public class Champ {
                 }
             }
 
-            Mechanics.setChampTab(newChampTab); // Aktualizacja tablicy champTab
+            Mechanics.setChampTab(newChampTab);
         }
     }
 
@@ -123,6 +119,9 @@ public class Champ {
     }
 
     public int getRandomDirection() {
+        if (excludedDirection.size() == 4) {
+            return 4;
+        }
         do {
             direction = ThreadLocalRandom.current().nextInt(0, 4);
         } while (excludedDirection.contains(direction));

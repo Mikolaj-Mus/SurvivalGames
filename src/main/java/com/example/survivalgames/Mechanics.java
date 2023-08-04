@@ -12,7 +12,7 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    private static final int UNIT_SIZE = 50;
+    private static final int UNIT_SIZE = 8;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     private static final int DELAY = 100;
     private static Champ[] champTab;
@@ -26,7 +26,7 @@ public class Mechanics extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        createChamps(99);
+        createChamps(2000);
         startGame();
     }
 
@@ -63,7 +63,7 @@ public class Mechanics extends JPanel implements ActionListener {
                 y = random.nextInt((int) Math.sqrt(GAME_UNITS));
             } while (occupiedPositions.contains(getPositionKey(x, y)));
 
-            champTab[i] = new Champ(i, x, y);
+            champTab[i] = new Champ(i+1, x, y);
             champTab[i].setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 
             occupiedPositions.add(getPositionKey(x, y));
@@ -112,7 +112,6 @@ public class Mechanics extends JPanel implements ActionListener {
             champ.move();
             champ.fight();
         }
-
         repaint();
     }
 
