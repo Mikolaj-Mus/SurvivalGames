@@ -5,8 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
 
-import static com.example.survivalgames.ChampBoard.getBoard;
-
 public class Champ {
     private int id;
     private int xCor;
@@ -32,22 +30,23 @@ public class Champ {
 [2] - LEFT
 [3] - RIGHT
  */
-    public void move() {
+public void move() {
 
-        checkBorder();
-        do {
+    checkBorder();
+    do {
         direction = ThreadLocalRandom.current().nextInt(0, 4);
-        } while (excludedDirection.contains(direction));
+    } while (excludedDirection.contains(direction));
+    excludedDirection.clear();
 
-        switch (direction) {
-            case 0 -> yCor -= 1;
-            case 1 -> yCor += 1;
-            case 2 -> xCor -= 1;
-            case 3 -> xCor += 1;
-        }
+    switch (direction) {
+        case 0 -> yCor -= 1;
+        case 1 -> yCor += 1;
+        case 2 -> xCor -= 1;
+        case 3 -> xCor += 1;
     }
+}
 
-    public List<Integer> checkBorder() {
+    public void checkBorder() {
         if (yCor == 0) {
             excludedDirection.add(0);
         }
@@ -60,7 +59,6 @@ public class Champ {
         if (xCor == (int) Math.sqrt(Mechanics.returnGAME_UNITS()) - 1) {
             excludedDirection.add(3);
         }
-        return excludedDirection;
     }
 
     public int getId() {

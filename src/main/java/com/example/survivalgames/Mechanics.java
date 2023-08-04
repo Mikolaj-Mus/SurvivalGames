@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static com.example.survivalgames.ChampBoard.*;
+import java.util.Set;
 
 public class Mechanics extends JPanel implements ActionListener {
 
@@ -15,8 +14,8 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_HEIGHT = 600;
     private static final int UNIT_SIZE = 60;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 3000;
-    private Champ[] champTab;
+    private static final int DELAY = 1000;
+    private static Champ[] champTab;
     boolean running = false;
     Timer timer;
     Random random = new Random();
@@ -55,14 +54,32 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public void createChamps(int number) {
         champTab = new Champ[number];
+        Set<String> occupiedPositions = new HashSet<>();
+
         for (int i = 0; i < champTab.length; i++) {
-            int x = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(GAME_UNITS));
-            int y = ThreadLocalRandom.current().nextInt(0, (int) Math.sqrt(GAME_UNITS));
+            int x, y;
+            do {
+                x = random.nextInt((int) Math.sqrt(GAME_UNITS));
+                y = random.nextInt((int) Math.sqrt(GAME_UNITS));
+            } while (occupiedPositions.contains(getPositionKey(x, y)));
+
             champTab[i] = new Champ(0, x, y);
             champTab[i].setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-            setCell(y, x, champTab[i]);
-        }
 
+            occupiedPositions.add(getPositionKey(x, y));
+        }
+    }
+
+    public static Champ[] getChampTab() {
+        return champTab;
+    }
+
+    public void setChampTab(Champ[] champTab) {
+        this.champTab = champTab;
+    }
+
+    private String getPositionKey(int x, int y) {
+        return x + "," + y;
     }
 
     public static int returnGAME_UNITS() {
