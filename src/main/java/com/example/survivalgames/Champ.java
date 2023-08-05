@@ -42,27 +42,27 @@ public class Champ {
         int newY;
 
         checkBorder();
+        checkEnemies(champMap);
 
-        do {
-            newX = xCor;
-            newY = yCor;
+        if(excludedDirection.size() < 4) {
+            do {
+                newX = xCor;
+                newY = yCor;
 
-            direction = getRandomDirection();
+                direction = getRandomDirection();
 
-
-            switch (direction) {
-                case 0 -> newY -= 1;
-                case 1 -> newY += 1;
-                case 2 -> newX -= 1;
-                case 3 -> newX += 1;
-                default -> {
+                switch (direction) {
+                    case 0 -> newY -= 1;
+                    case 1 -> newY += 1;
+                    case 2 -> newX -= 1;
+                    case 3 -> newX += 1;
+                    default -> {
+                    }
                 }
-            }
-        } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
+            } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
 
-
-        updatePosition(newX, newY, champMap);
-
+            updatePosition(newX, newY, champMap);
+        }
     }
 
     public void fight(HashMap<String, Champ> champMap) {
@@ -121,9 +121,20 @@ public class Champ {
             excludedDirection.add(3);
         }
     }
-//    public checkEnemies(){
-//        if()
-//    }
+    public void checkEnemies(HashMap<String, Champ> champMap){
+        if (champMap.containsKey(Mechanics.getPositionKey(xCor, yCor - 1))) {
+            excludedDirection.add(4);
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(xCor, yCor + 1))) {
+            excludedDirection.add(5);
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(xCor - 1, yCor))) {
+            excludedDirection.add(6);
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(xCor + 1, yCor))) {
+            excludedDirection.add(7);
+        }
+    }
 
 
     public int getxCor() {

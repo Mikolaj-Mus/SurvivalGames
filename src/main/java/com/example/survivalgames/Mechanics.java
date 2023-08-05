@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Mechanics extends JPanel implements ActionListener {
@@ -14,8 +13,9 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
     public static final int UNIT_SIZE = 80;
+    private static final int DELAY = 1000;
+    private static final int CHAMPS_NUM = 99;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
-    private static final int DELAY = 100;
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
     boolean running = false;
@@ -27,7 +27,7 @@ public class Mechanics extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        createChamps(42);
+        createChamps(CHAMPS_NUM);
         startGame();
     }
 
