@@ -1,6 +1,7 @@
 package com.example.survivalgames;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,7 +27,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
-//        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE(), yCor * Mechanics.UNIT_SIZE());
+//        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE);
     }
 
     /*
@@ -35,7 +36,7 @@ public class Champ {
     [2] - LEFT
     [3] - RIGHT
      */
-    public void move() {
+    public void move(HashMap<String, Champ> champMap) {
 
         int newX;
         int newY;
@@ -48,84 +49,61 @@ public class Champ {
 
             direction = getRandomDirection();
 
-            if (direction == 4) {
-                break;
-            }
 
             switch (direction) {
                 case 0 -> newY -= 1;
                 case 1 -> newY += 1;
                 case 2 -> newX -= 1;
                 case 3 -> newX += 1;
-                default -> {}
-            }
-        } while (Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(newX, newY)));
-
-        if (direction != 4) {
-            updatePosition(newX, newY);
-        }
-    }
-
-    public void fight() {
-        if (hasAdjacentChampion(xCor, yCor)) {
-            fightAdjacentChampion(xCor, yCor);
-        }
-    }
-
-    private void fightAdjacentChampion(int x, int y) {
-        Champ winner = null;
-        int loserId = -1;
-        for (Champ champion : Mechanics.getChampTab()) {
-            if (champion != this && isAdjacent(x, y, champion)) {
-                loserId = champion.getId();
-                winner = new Random().nextBoolean() ? this : champion;
-                break;
-            }
-        }
-        if (winner == this) {
-            Champ[] newChampTab = new Champ[Mechanics.getChampTab().length - 1];
-            int newIndex = 0;
-
-            for (Champ champion : Mechanics.getChampTab()) {
-                if (champion.getId() != loserId) {
-                    newChampTab[newIndex] = champion;
-                    newIndex++;
+                default -> {
                 }
             }
+        } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
 
-            Mechanics.setChampTab(newChampTab);
+
+        updatePosition(newX, newY, champMap);
+
+    }
+
+    public void fight(HashMap<String, Champ> champMap) {
+        Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
+        if (opponent != null) {
+            Champ winner = Mechanics.random.nextBoolean() ? this : opponent;
+            Champ loser = winner == this ? opponent : this;
+            Mechanics.removeChampion(loser);
         }
     }
 
-    private boolean isAdjacent(int x, int y, Champ champion) {
-        int dx = Math.abs(x - champion.getxCor());
-        int dy = Math.abs(y - champion.getyCor());
-        return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
+    private Champ getAdjacentChampion(int x, int y, HashMap<String, Champ> champMap) {
+        if (champMap.containsKey(Mechanics.getPositionKey(x, y - 1))) {
+            return champMap.get(Mechanics.getPositionKey(x, y - 1));
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(x, y + 1))) {
+            return champMap.get(Mechanics.getPositionKey(x, y + 1));
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(x - 1, y))) {
+            return champMap.get(Mechanics.getPositionKey(x - 1, y));
+        }
+        if (champMap.containsKey(Mechanics.getPositionKey(x + 1, y))) {
+            return champMap.get(Mechanics.getPositionKey(x + 1, y));
+        }
+        return null;
     }
 
-    private boolean hasAdjacentChampion(int x, int y) {
-        return Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x, y - 1)) ||
-                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x, y + 1)) ||
-                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x - 1, y)) ||
-                Mechanics.getOccupiedPositions().contains(Mechanics.getPositionKey(x + 1, y));
-    }
 
-
-    public void updatePosition(int newX, int newY) {
-        Mechanics.getOccupiedPositions().add(Mechanics.getPositionKey(newX, newY));
-        Mechanics.getOccupiedPositions().remove(Mechanics.getPositionKey(xCor, yCor));
+    public void updatePosition(int newX, int newY, HashMap<String, Champ> champMap) {
+        champMap.remove(Mechanics.getPositionKey(xCor, yCor));
         xCor = newX;
         yCor = newY;
+        champMap.put(Mechanics.getPositionKey(xCor, yCor), this);
         excludedDirection.clear();
     }
 
     public int getRandomDirection() {
-        if (excludedDirection.size() == 4) {
-            return 4;
-        }
         do {
             direction = ThreadLocalRandom.current().nextInt(0, 4);
         } while (excludedDirection.contains(direction));
+
         return direction;
     }
 
@@ -143,49 +121,17 @@ public class Champ {
             excludedDirection.add(3);
         }
     }
+//    public checkEnemies(){
+//        if()
+//    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getxCor() {
         return xCor;
     }
 
-    public void setxCor(int xCor) {
-        this.xCor = xCor;
-    }
-
     public int getyCor() {
         return yCor;
-    }
-
-    public void setyCor(int yCor) {
-        this.yCor = yCor;
-    }
-
-    public int getStrength() {
-        return strength;
-    }
-
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     public void setColor(Color color) {
