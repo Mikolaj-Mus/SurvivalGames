@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
 
+
 public class Champ {
     private int id;
     private int xCor;
@@ -24,8 +25,8 @@ public class Champ {
 
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillOval(xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE(), Mechanics.getUNIT_SIZE());
-//        g.drawString(String.valueOf(id), xCor * Mechanics.getUNIT_SIZE(), yCor * Mechanics.getUNIT_SIZE());
+        g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
+//        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE(), yCor * Mechanics.UNIT_SIZE());
     }
 
     /*
@@ -132,13 +133,13 @@ public class Champ {
         if (yCor == 0) {
             excludedDirection.add(0);
         }
-        if (yCor == (int) Math.sqrt(Mechanics.getGAME_UNITS()) - 1) {
+        if (yCor == Mechanics.CELLS - 1) {
             excludedDirection.add(1);
         }
         if (xCor == 0) {
             excludedDirection.add(2);
         }
-        if (xCor == (int) Math.sqrt(Mechanics.getGAME_UNITS()) - 1) {
+        if (xCor == Mechanics.CELLS - 1) {
             excludedDirection.add(3);
         }
     }

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -12,10 +13,11 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    private static final int UNIT_SIZE = 8;
+    public static final int UNIT_SIZE = 8;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     private static final int DELAY = 100;
-    private static Champ[] champTab;
+    public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
+    private static HashMap<String, Champ> champTab = new HashMap<>();
     boolean running = false;
     Timer timer;
     Random random = new Random();
@@ -26,7 +28,7 @@ public class Mechanics extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
-        createChamps(2000);
+        createChamps(1000);
         startGame();
     }
 
@@ -39,7 +41,7 @@ public class Mechanics extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 //        drawLines(g);
-        for (Champ champ : champTab) {
+        for (Champ champ : champTab.values()) {
             champ.draw(g);
         }
     }
@@ -54,29 +56,21 @@ public class Mechanics extends JPanel implements ActionListener {
     }
 
     public void createChamps(int number) {
-        champTab = new Champ[number];
-
-        for (int i = 0; i < champTab.length; i++) {
+        for (int i = 0; i < number; i++) {
             int x, y;
             do {
-                x = random.nextInt((int) Math.sqrt(GAME_UNITS));
-                y = random.nextInt((int) Math.sqrt(GAME_UNITS));
-            } while (occupiedPositions.contains(getPositionKey(x, y)));
+                x = random.nextInt(CELLS);
+                y = random.nextInt(CELLS);
+            } while (champTab.containsKey(getPositionKey(x, y)));
 
-            champTab[i] = new Champ(i+1, x, y);
-            champTab[i].setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+            Champ champ = new Champ(i+1, x, y);
+            champ.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
 
-            occupiedPositions.add(getPositionKey(x, y));
+            champTab.put(getPositionKey(x, y), champ);
         }
     }
 
-    public static void setChampTab(Champ[] champTab) {
-        Mechanics.champTab = champTab;
-    }
 
-    public static Champ[] getChampTab() {
-        return champTab;
-    }
 
     public static String getPositionKey(int x, int y) {
         return x + "," + y;
@@ -84,10 +78,6 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public static Set<String> getOccupiedPositions() {
         return occupiedPositions;
-    }
-
-    public void setOccupiedPositions(Set<String> occupiedPositions) {
-        this.occupiedPositions = occupiedPositions;
     }
 
     public static int getGAME_UNITS() {
@@ -108,7 +98,7 @@ public class Mechanics extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for (Champ champ : champTab) {
+        for (Champ champ : champTab.values()) {
             champ.move();
             champ.fight();
         }
