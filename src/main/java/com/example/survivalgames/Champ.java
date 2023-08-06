@@ -19,6 +19,7 @@ public class Champ {
     private final List<Integer> excludedDirection = new ArrayList<>();
     private boolean defeated = false;
 
+    Font font = new Font("Arial", Font.BOLD, Mechanics.UNIT_SIZE/2);
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -29,7 +30,9 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
-        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE);
+        g.setColor(Color.BLACK);
+        g.setFont(font);
+        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 3, yCor * Mechanics.UNIT_SIZE + 2 * (Mechanics.UNIT_SIZE / 3));
     }
 
     /*
@@ -76,9 +79,7 @@ public class Champ {
 
         Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
         if (opponent != null) {
-            System.out.println("DDDDDD");
-            System.out.println(this.id);
-            System.out.println(opponent.id);
+            System.out.println("--------------");
             Champ winner = Mechanics.random.nextBoolean() ? this : opponent;
             Champ loser = winner == this ? opponent : this;
             System.out.println(winner.id);
