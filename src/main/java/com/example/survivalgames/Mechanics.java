@@ -14,7 +14,7 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
     public static final int UNIT_SIZE = 80;
-    private static final int DELAY = 1000;
+    private static final int DELAY = 10;
     private static final int CHAMPS_NUM = 100;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
@@ -22,6 +22,7 @@ public class Mechanics extends JPanel implements ActionListener {
     boolean running = false;
     Timer timer;
     static Random random = new Random();
+    public static int i = 0;
 
 
     Mechanics() {
@@ -97,7 +98,8 @@ public class Mechanics extends JPanel implements ActionListener {
     }
 
     public static void removeChampion(Champ championToRemove) {
-        System.out.println("ID: " + championToRemove.getId());
+        i++;
+        System.out.println("ID: " + championToRemove.getId() + " " + i);
         champMap.remove(getPositionKey(championToRemove.getxCor(), championToRemove.getyCor()));
     }
 

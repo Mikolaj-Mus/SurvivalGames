@@ -64,10 +64,13 @@ public class Champ {
             } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
             updatePosition(newX, newY, champMap);
         }
+        excludedDirection.clear();
+
     }
 
     public void fight(HashMap<String, Champ> champMap) {
         if(defeated) {
+//            Mechanics.removeChampion(this);
             return;
         }
 
@@ -107,7 +110,6 @@ public class Champ {
         xCor = newX;
         yCor = newY;
         champMap.put(Mechanics.getPositionKey(xCor, yCor), this);
-        excludedDirection.clear();
     }
 
     public int getRandomDirection() {
