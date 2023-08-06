@@ -17,6 +17,7 @@ public class Champ {
     private int direction;
     private Color color;
     private final List<Integer> excludedDirection = new ArrayList<>();
+    private boolean defeated = false;
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -27,7 +28,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
-//        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE);
+        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE);
     }
 
     /*
@@ -60,16 +61,26 @@ public class Champ {
                     }
                 }
             } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
-
+            System.out.print("D:" + direction);
             updatePosition(newX, newY, champMap);
         }
     }
 
     public void fight(HashMap<String, Champ> champMap) {
+
+        if (defeated) {
+            return;
+        }
         Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
         if (opponent != null) {
+            System.out.println("F:");
+        System.out.println(this.id);
+        System.out.println(opponent.id);
             Champ winner = Mechanics.random.nextBoolean() ? this : opponent;
             Champ loser = winner == this ? opponent : this;
+            System.out.println(winner.id);
+            System.out.println(loser.id);
+            loser.defeated = true;
             Mechanics.removeChampion(loser);
         }
     }
