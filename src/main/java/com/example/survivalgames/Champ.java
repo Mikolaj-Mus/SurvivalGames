@@ -19,6 +19,7 @@ public class Champ {
     private final List<Integer> excludedDirection = new ArrayList<>();
     private boolean defeated = false;
 
+
     public Champ(int id, int x, int y) {
         this.id = id;
         this.xCor = x;
@@ -45,7 +46,7 @@ public class Champ {
         checkBorder();
         checkEnemies(champMap);
 
-        if(excludedDirection.size() < 4) {
+        if (excludedDirection.size() < 4 && !defeated ) {
             do {
                 newX = xCor;
                 newY = yCor;
@@ -61,26 +62,25 @@ public class Champ {
                     }
                 }
             } while (champMap.containsKey(Mechanics.getPositionKey(newX, newY)));
-            System.out.print("D:" + direction);
             updatePosition(newX, newY, champMap);
         }
     }
 
     public void fight(HashMap<String, Champ> champMap) {
-
-        if (defeated) {
+        if(defeated) {
             return;
         }
+
         Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
         if (opponent != null) {
-            System.out.println("F:");
-        System.out.println(this.id);
-        System.out.println(opponent.id);
+            System.out.println("DDDDDD");
+            System.out.println(this.id);
+            System.out.println(opponent.id);
             Champ winner = Mechanics.random.nextBoolean() ? this : opponent;
             Champ loser = winner == this ? opponent : this;
             System.out.println(winner.id);
             System.out.println(loser.id);
-            loser.defeated = true;
+            loser.setDefeated(true);
             Mechanics.removeChampion(loser);
         }
     }
@@ -132,7 +132,8 @@ public class Champ {
             excludedDirection.add(3);
         }
     }
-    public void checkEnemies(HashMap<String, Champ> champMap){
+
+    public void checkEnemies(HashMap<String, Champ> champMap) {
         if (champMap.containsKey(Mechanics.getPositionKey(xCor, yCor - 1))) {
             excludedDirection.add(4);
         }
@@ -147,6 +148,13 @@ public class Champ {
         }
     }
 
+    public boolean isDefeated() {
+        return defeated;
+    }
+
+    public void setDefeated(boolean defeated) {
+        this.defeated = defeated;
+    }
 
     public int getxCor() {
         return xCor;
@@ -158,5 +166,9 @@ public class Champ {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public int getId() {
+        return id;
     }
 }
