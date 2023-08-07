@@ -1,9 +1,7 @@
 package com.example.survivalgames;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
@@ -16,9 +14,8 @@ public class Champ {
     private int strength = 1;
     private int direction;
     private Color color;
-    private final List<Integer> excludedDirection = new ArrayList<>();
+    private final Set<Integer> excludedDirection = new HashSet<>();
     private boolean defeated = false;
-
     Font font = new Font("Arial", Font.BOLD, Mechanics.UNIT_SIZE/2);
 
     public Champ(int id, int x, int y) {
