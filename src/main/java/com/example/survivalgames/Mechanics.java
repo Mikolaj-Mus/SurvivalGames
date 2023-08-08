@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
@@ -13,28 +15,29 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    public static final int UNIT_SIZE = 8;
-    private static final int DELAY = 1000;
+    public static final int UNIT_SIZE = 4;
+    private static final int DELAY = 1;
     private static final int CHAMPS_NUM = 1000;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
-    boolean running = false;
+    private boolean running = false;
     Timer timer;
     static Random random = new Random();
     public static int i = 0;
+
 
 
     Mechanics() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
+        this.addKeyListener(new MyKeyAdapter());
         createChamps(CHAMPS_NUM);
         startGame();
     }
 
     public void startGame() {
-        running = true;
         timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -109,18 +112,33 @@ public class Mechanics extends JPanel implements ActionListener {
         ArrayList<Champ> championsCopy = new ArrayList<>(champMap.values());
 
         ListIterator<Champ> iterator = championsCopy.listIterator();
-        while (iterator.hasNext()) {
-            Champ champ = iterator.next();
-            champ.move(champMap);
-        repaint();
-            champ.fight(champMap);
+        if (running) {
+            while (iterator.hasNext()) {
+                Champ champ = iterator.next();
+                champ.move(champMap);
+                repaint();
+                champ.fight(champMap);
 
-            if(champ.isDefeated() || !champMap.containsValue(champ)) {
-                iterator.remove();
+                if (champ.isDefeated() || !champMap.containsValue(champ)) {
+                    iterator.remove();
+                }
             }
         }
 
     }
 
+    public class MyKeyAdapter extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
 
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER -> running = true;
+                case KeyEvent.VK_SPACE -> running = false;
+            }
+        }
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
 }

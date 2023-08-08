@@ -16,7 +16,7 @@ public class Champ {
     private Color color;
     private final Set<Integer> excludedDirection = new HashSet<>();
     private boolean defeated = false;
-    Font font = new Font("Arial", Font.BOLD, Mechanics.UNIT_SIZE/2);
+    Font font = new Font("Arial", Font.BOLD, Mechanics.UNIT_SIZE / 2);
 
     public Champ(int id, int x, int y) {
         this.id = id;
@@ -27,9 +27,12 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
-        g.setColor(Color.BLACK);
-        g.setFont(font);
-        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 3, yCor * Mechanics.UNIT_SIZE + 2 * (Mechanics.UNIT_SIZE / 3));
+
+
+
+//        g.setColor(Color.BLACK);
+//        g.setFont(font);
+//        g.drawString(String.valueOf(id), xCor * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 3, yCor * Mechanics.UNIT_SIZE + 2 * (Mechanics.UNIT_SIZE / 3));
     }
 
     /*
@@ -46,7 +49,7 @@ public class Champ {
         checkBorder();
         checkEnemies(champMap);
 
-        if (excludedDirection.size() < 4 && !defeated ) {
+        if (excludedDirection.size() < 4 && !defeated) {
             do {
                 newX = xCor;
                 newY = yCor;
@@ -69,7 +72,7 @@ public class Champ {
     }
 
     public void fight(HashMap<String, Champ> champMap) {
-        if(defeated) {
+        if (defeated) {
 //            Mechanics.removeChampion(this);
             return;
         }
