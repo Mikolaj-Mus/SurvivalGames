@@ -15,9 +15,9 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    public static final int UNIT_SIZE = 4;
+    public static final int UNIT_SIZE = 20;
     private static final int DELAY = 1;
-    private static final int CHAMPS_NUM = 1000;
+    private static final int CHAMPS_NUM = 5;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
@@ -25,8 +25,7 @@ public class Mechanics extends JPanel implements ActionListener {
     Timer timer;
     static Random random = new Random();
     public static int i = 0;
-
-
+    Font font = new Font("Calibre Light", Font.ITALIC, 200);
 
     Mechanics() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -44,9 +43,12 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-//        drawLines(g);
-        for (Champ champ : champMap.values()) {
-            champ.draw(g);
+        if (champMap.size() != 1) {
+            for (Champ champ : champMap.values()) {
+                champ.draw(g);
+            }
+        } else {
+            gameOver(g);
         }
     }
 
@@ -74,57 +76,38 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
-
-//    public void createChamps(int number) {
-//
-//        Champ champ1 = new Champ(1, 1, 1);
-//        champ1.setColor(Color.BLUE);
-//        Champ champ2 = new Champ(2, 2, 1);
-//        champ2.setColor(Color.YELLOW);
-//        Champ champ3 = new Champ(3, 2, 2);
-//        champ3.setColor(Color.RED);
-////        Champ champ4 = new Champ(4, 4, 1);
-////        champ4.setColor(Color.GREEN);
-////        Champ champ5 = new Champ(5, 5, 1);
-////        champ5.setColor(Color.ORANGE);
-//
-//        champMap.put(getPositionKey(1, 1), champ1);
-//        champMap.put(getPositionKey(2, 1), champ2);
-//        champMap.put(getPositionKey(2, 2), champ3);
-////        champMap.put(getPositionKey(4, 1), champ4);
-////        champMap.put(getPositionKey(5, 1), champ5);
-//
-//    }
-
     public static String getPositionKey(int x, int y) {
         return x + "," + y;
     }
 
     public static void removeChampion(Champ championToRemove) {
         i++;
-        System.out.println("ID: " + championToRemove.getId() + " " + i);
+        System.out.println("Fight num: " + i);
         champMap.remove(getPositionKey(championToRemove.getxCor(), championToRemove.getyCor()));
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
         ArrayList<Champ> championsCopy = new ArrayList<>(champMap.values());
 
         ListIterator<Champ> iterator = championsCopy.listIterator();
-        if (running) {
+        if (running && champMap.size() > 1) {
             while (iterator.hasNext()) {
                 Champ champ = iterator.next();
                 champ.move(champMap);
-                repaint();
                 champ.fight(champMap);
+                repaint();
 
                 if (champ.isDefeated() || !champMap.containsValue(champ)) {
                     iterator.remove();
                 }
             }
         }
+    }
 
+    public void gameOver(Graphics g) {
+        g.setColor(champMap.values().iterator().next().getColor());
+        g.fillOval(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     }
 
     public class MyKeyAdapter extends KeyAdapter {
@@ -138,7 +121,4 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
-    public boolean isRunning() {
-        return running;
-    }
 }
