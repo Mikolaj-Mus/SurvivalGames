@@ -21,11 +21,11 @@ public class Mechanics extends JPanel implements ActionListener {
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
-    private static boolean running = false;
+    private boolean running = false;
     Timer timer;
     static Random random = new Random();
     public static int i = 0;
-    Font font = new Font("Calibre Light", Font.ITALIC, 200);
+    Font font = new Font("Calibre", Font.BOLD, 100);
 
     Mechanics() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -46,6 +46,9 @@ public class Mechanics extends JPanel implements ActionListener {
         if (champMap.size() != 1) {
             for (Champ champ : champMap.values()) {
                 champ.draw(g);
+                if (!running) {
+                    g.drawString(String.valueOf(champ.getId()), champ.getxCor() * Mechanics.UNIT_SIZE, champ.getyCor() * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 8);
+                }
             }
         } else {
             gameOver(g);
@@ -82,7 +85,7 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public static void removeChampion(Champ championToRemove) {
         i++;
-        System.out.println("Fight num: " + i);
+//        System.out.println("Fight num: " + i);
         champMap.remove(getPositionKey(championToRemove.getxCor(), championToRemove.getyCor()));
     }
 
@@ -108,23 +111,24 @@ public class Mechanics extends JPanel implements ActionListener {
     public void gameOver(Graphics g) {
         g.setColor(champMap.values().iterator().next().getColor());
         g.fillOval(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.setFont(new Font("Calibre", Font.BOLD, 100));
+        g.setFont(font);
         g.drawString("WINNER", SCREEN_WIDTH / 4, SCREEN_HEIGHT - SCREEN_HEIGHT / 4);
         g.drawString("#" + champMap.values().iterator().next().getId(), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8);
     }
 
-    public static class MyKeyAdapter extends KeyAdapter {
+    public class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_ENTER -> running = true;
-                case KeyEvent.VK_SPACE -> running = false;
+                case KeyEvent.VK_ENTER -> {
+                    running = true;
+                    Mechanics.this.repaint(); // Dodaj to wywołanie
+                }
+                case KeyEvent.VK_SPACE -> {
+                    running = false;
+                    Mechanics.this.repaint(); // Dodaj to wywołanie
+                }
             }
         }
-    }
-
-    public static boolean isRunning() {
-        return running;
     }
 }

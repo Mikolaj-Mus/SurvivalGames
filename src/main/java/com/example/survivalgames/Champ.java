@@ -25,9 +25,7 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
-        if (!Mechanics.isRunning()) {
-            g.drawString(String.valueOf(this.getId()), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 8);
-        }
+
     }
 
 
@@ -74,12 +72,12 @@ public class Champ {
 
         Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
         if (opponent != null) {
-            System.out.println("--------------");
+//            System.out.println("--------------");
             Champ winner = determineFightWinner(this, opponent);
             Champ loser = winner == this ? opponent : this;
             winner.increaseStrength();
-            System.out.println("Winner: " + winner.id + " Strength: " + winner.strength);
-            System.out.println("Loser: " + loser.id + " Strength: " + loser.strength);
+//            System.out.println("Winner: " + winner.id + " Strength: " + winner.strength);
+//            System.out.println("Loser: " + loser.id + " Strength: " + loser.strength);
             loser.setDefeated(true);
             Mechanics.removeChampion(loser);
         }
