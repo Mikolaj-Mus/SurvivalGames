@@ -15,13 +15,13 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    public static final int UNIT_SIZE = 20;
+    public static final int UNIT_SIZE = 8;
     private static final int DELAY = 1;
-    private static final int CHAMPS_NUM = 5;
+    private static final int CHAMPS_NUM = 1000;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
-    private boolean running = false;
+    private static boolean running = false;
     Timer timer;
     static Random random = new Random();
     public static int i = 0;
@@ -108,9 +108,12 @@ public class Mechanics extends JPanel implements ActionListener {
     public void gameOver(Graphics g) {
         g.setColor(champMap.values().iterator().next().getColor());
         g.fillOval(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.setFont(new Font("Calibre", Font.BOLD, 100));
+        g.drawString("WINNER", SCREEN_WIDTH / 4, SCREEN_HEIGHT - SCREEN_HEIGHT / 4);
+        g.drawString("#" + champMap.values().iterator().next().getId(), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8);
     }
 
-    public class MyKeyAdapter extends KeyAdapter {
+    public static class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
 
@@ -121,4 +124,7 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
+    public static boolean isRunning() {
+        return running;
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.survivalgames;
 
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import java.awt.*;
@@ -26,6 +25,9 @@ public class Champ {
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillOval(xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE, Mechanics.UNIT_SIZE);
+        if (!Mechanics.isRunning()) {
+            g.drawString(String.valueOf(this.getId()), xCor * Mechanics.UNIT_SIZE, yCor * Mechanics.UNIT_SIZE + Mechanics.UNIT_SIZE / 8);
+        }
     }
 
 
@@ -73,13 +75,24 @@ public class Champ {
         Champ opponent = getAdjacentChampion(xCor, yCor, champMap);
         if (opponent != null) {
             System.out.println("--------------");
-            Champ winner = Mechanics.random.nextBoolean() ? this : opponent;
+            Champ winner = determineFightWinner(this, opponent);
             Champ loser = winner == this ? opponent : this;
-            System.out.println("Winner: " + winner.id);
-            System.out.println("Loser: " + loser.id);
+            winner.increaseStrength();
+            System.out.println("Winner: " + winner.id + " Strength: " + winner.strength);
+            System.out.println("Loser: " + loser.id + " Strength: " + loser.strength);
             loser.setDefeated(true);
             Mechanics.removeChampion(loser);
         }
+    }
+
+    private void increaseStrength() {
+        strength++;
+    }
+
+    public Champ determineFightWinner(Champ champ1, Champ champ2) {
+        int strengthDifference = champ1.getStrength() - champ2.getStrength();
+        double champ1WinProbability = 1.0 / (1 + Math.exp(-strengthDifference));
+        return Math.random() < champ1WinProbability ? champ1 : champ2;
     }
 
     private Champ getAdjacentChampion(int x, int y, HashMap<String, Champ> champMap) {
@@ -170,5 +183,13 @@ public class Champ {
 
     public Color getColor() {
         return color;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
     }
 }
