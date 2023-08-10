@@ -1,7 +1,6 @@
 package com.example.survivalgames;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.awt.*;
 
 public class Champ {
