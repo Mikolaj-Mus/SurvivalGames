@@ -94,6 +94,10 @@ public class Mechanics extends JPanel implements ActionListener {
         g.drawString("#" + winner.getId(), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 6);
     }
 
+    public static Random getRandom() {
+        return random;
+    }
+
     // Handles game actions, champion movement, fights, and updates.
     @Override
     public void actionPerformed(ActionEvent e) {

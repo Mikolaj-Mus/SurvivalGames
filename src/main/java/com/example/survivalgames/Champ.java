@@ -2,9 +2,7 @@ package com.example.survivalgames;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
 import java.awt.*;
-
 
 public class Champ {
     private final int id;
@@ -121,7 +119,7 @@ public class Champ {
     // Returns a random movement direction for the champion.
     public int getRandomDirection() {
         do {
-            direction = ThreadLocalRandom.current().nextInt(0, 4);
+            direction = Mechanics.getRandom().nextInt(0, 4);
         } while (excludedDirection.contains(direction));
 
         return direction;
