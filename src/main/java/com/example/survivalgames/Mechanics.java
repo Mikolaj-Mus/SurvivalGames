@@ -15,9 +15,9 @@ public class Mechanics extends JPanel implements ActionListener {
 
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 800;
-    public static final int UNIT_SIZE = 8;
-    private static final int DELAY = 1;
-    private static final int CHAMPS_NUM = 1000;
+    public static final int UNIT_SIZE = 80;
+    private static final int DELAY = 100;
+    private static final int CHAMPS_NUM = 100;
     private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
@@ -25,8 +25,8 @@ public class Mechanics extends JPanel implements ActionListener {
     Timer timer;
     static Random random = new Random();
     public static int i = 0;
-    Font font = new Font("Calibre", Font.BOLD, 100);
 
+    // Initializes the game mechanics, creates champions, and starts the game loop.
     Mechanics() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -36,11 +36,13 @@ public class Mechanics extends JPanel implements ActionListener {
         startGame();
     }
 
+    // Starts the game loop timer.
     public void startGame() {
         timer = new Timer(DELAY, this);
         timer.start();
     }
 
+    // Draws champions on the screen and handles game over state.
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (champMap.size() != 1) {
@@ -55,15 +57,7 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
-    public void drawLines(Graphics g) {
-        if (running) {
-            for (int i = 0; i < SCREEN_WIDTH / UNIT_SIZE; i++) {
-                g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
-                g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
-            }
-        }
-    }
-
+    // Creates a specified number of champions with random positions and colors.
     public void createChamps(int number) {
         for (int i = 0; i < number; i++) {
             int x, y;
@@ -79,16 +73,28 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
+    // Generates a unique key based on position coordinates.
     public static String getPositionKey(int x, int y) {
         return x + "," + y;
     }
 
+    // Removes a defeated champion from the map.
     public static void removeChampion(Champ championToRemove) {
         i++;
-//        System.out.println("Fight num: " + i);
         champMap.remove(getPositionKey(championToRemove.getxCor(), championToRemove.getyCor()));
     }
 
+    // Displays the winning champion's information and graphics.
+    public void gameOver(Graphics g) {
+        Champ winner = champMap.values().iterator().next();
+        g.setColor(winner.getColor());
+        g.fillOval(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 5, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        g.setFont(new Font("Calibre", Font.BOLD, 100));
+        g.drawString("WINNER", SCREEN_WIDTH / 4, SCREEN_HEIGHT - SCREEN_HEIGHT / 6);
+        g.drawString("#" + winner.getId(), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 6);
+    }
+
+    // Handles game actions, champion movement, fights, and updates.
     @Override
     public void actionPerformed(ActionEvent e) {
         ArrayList<Champ> championsCopy = new ArrayList<>(champMap.values());
@@ -108,26 +114,20 @@ public class Mechanics extends JPanel implements ActionListener {
         }
     }
 
-    public void gameOver(Graphics g) {
-        g.setColor(champMap.values().iterator().next().getColor());
-        g.fillOval(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        g.setFont(font);
-        g.drawString("WINNER", SCREEN_WIDTH / 4, SCREEN_HEIGHT - SCREEN_HEIGHT / 4);
-        g.drawString("#" + champMap.values().iterator().next().getId(), SCREEN_WIDTH / 4, SCREEN_HEIGHT / 8);
-    }
-
+    // Handles key events for starting, pausing, and quitting the game.
     public class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_ENTER -> {
                     running = true;
-                    Mechanics.this.repaint(); // Dodaj to wywołanie
+                    Mechanics.this.repaint();
                 }
                 case KeyEvent.VK_SPACE -> {
                     running = false;
-                    Mechanics.this.repaint(); // Dodaj to wywołanie
+                    Mechanics.this.repaint();
                 }
+                case KeyEvent.VK_ESCAPE -> System.exit(0);
             }
         }
     }
