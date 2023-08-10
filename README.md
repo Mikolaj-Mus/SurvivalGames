@@ -13,7 +13,7 @@ Welcome to the Survival Games Simulation! In this simple game, colorful champion
 ## How to Play
 
 1. Clone the repository to your local machine.
-2. Compile and run the Mechanics.java file to start the simulation.
+2. Compile and run the **'Mechanics.java'** file to start the simulation.
 3. Press Enter to begin the game.
 4. Observe champs moving, fighting, and growing stronger.
 5. Press Space to pause the simulation and observe the state.
