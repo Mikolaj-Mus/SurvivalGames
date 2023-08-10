@@ -13,21 +13,21 @@ import java.util.Random;
 
 public class Mechanics extends JPanel implements ActionListener {
 
-    private static final int SCREEN_WIDTH = 800;
-    private static final int SCREEN_HEIGHT = 800;
+    public static final int SCREEN_WIDTH = 800;
+    public static final int SCREEN_HEIGHT = 800;
     public static final int UNIT_SIZE = 80;
-    private static final int DELAY = 100;
-    private static final int CHAMPS_NUM = 100;
-    private static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
+    public static final int DELAY = 100;
+    public static final int CHAMPS_NUM = 100;
+    public static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
     private boolean running = false;
     Timer timer;
     static Random random = new Random();
-    public static int i = 0;
 
     // Initializes the game mechanics, creates champions, and starts the game loop.
     Mechanics() {
+
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
@@ -59,6 +59,9 @@ public class Mechanics extends JPanel implements ActionListener {
 
     // Creates a specified number of champions with random positions and colors.
     public void createChamps(int number) {
+        if (number > GAME_UNITS) {
+            throw new IllegalArgumentException("Number of champions to create exceeds available game units.");
+        }
         for (int i = 0; i < number; i++) {
             int x, y;
             do {
@@ -80,7 +83,6 @@ public class Mechanics extends JPanel implements ActionListener {
 
     // Removes a defeated champion from the map.
     public static void removeChampion(Champ championToRemove) {
-        i++;
         champMap.remove(getPositionKey(championToRemove.getxCor(), championToRemove.getyCor()));
     }
 
@@ -96,6 +98,14 @@ public class Mechanics extends JPanel implements ActionListener {
 
     public static Random getRandom() {
         return random;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     // Handles game actions, champion movement, fights, and updates.
