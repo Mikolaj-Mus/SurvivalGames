@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ChampTest {
 
+    // Tests the creation of a Champ instance and its initial properties.
     @Test
     public void testCreateChamp() {
         // Arrange
@@ -28,9 +29,10 @@ public class ChampTest {
         assertNull(champ.getColor());
     }
 
+    // Tests moving a Champ instance to a new position where another Champ is present.
     @Test
     public void testMoveOnAnotherChamp() {
-        // Arrange
+
         Champ champ = new Champ(1, 2, 2);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(2, 2), champ);
@@ -38,26 +40,22 @@ public class ChampTest {
         champMap.put(Mechanics.getPositionKey(3, 2), new Champ(3, 2, 1));
         champMap.put(Mechanics.getPositionKey(1, 2), new Champ(1, 2, 1));
 
-        // Act
         champ.move(champMap);
 
-        // Assert
         assertEquals(2, champ.getxCor());
         assertEquals(3, champ.getyCor());
     }
 
+    // Tests updating the position of a Champ instance after moving.
     @Test
     public void testUpdateMove() {
 
-        // Arrange
         Champ champ = new Champ(1, 5, 5);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(5, 5), champ);
 
-        // Act
         champ.move(champMap);
 
-        // Assert
         if (champ.getxCor() == 5) {
             assertTrue(champ.getyCor() == 4 || champ.getyCor() == 6);
         }
@@ -66,9 +64,10 @@ public class ChampTest {
         }
     }
 
+    // Tests that a Champ instance does not move when surrounded by other Champs.
     @Test
     public void testChampHasNoMove() {
-        // Arrange
+
         Champ champ = new Champ(1, 3, 3);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(3, 3), champ);
@@ -77,44 +76,39 @@ public class ChampTest {
         champMap.put(Mechanics.getPositionKey(4, 3), new Champ(4, 4, 3));
         champMap.put(Mechanics.getPositionKey(3, 4), new Champ(5, 3, 4));
 
-        // Act
         champ.move(champMap);
 
-        // Assert
         assertEquals(3, champ.getxCor());
         assertEquals(3, champ.getyCor());
     }
 
+    // Tests that a Champ instance cannot move beyond the game borders.
     @Test
     public void testChampMoveNextToBorder() {
 
-        // Arrange
         Champ champ = new Champ(1, 9, 9);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(9, 9), champ);
 
-        // Act
         champ.move(champMap);
 
-        // Assert
         assertNotEquals(Mechanics.CELLS, champ.getxCor());
         assertNotEquals(Mechanics.CELLS, champ.getyCor());
 
     }
 
+    // Tests the strength of Champs after a fight.
     @Test
     public void testStrengthAfterFight() {
-        // Arrange
+
         Champ champ1 = new Champ(1, 2, 2);
         Champ champ2 = new Champ(2, 3, 2);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(2, 2), champ1);
         champMap.put(Mechanics.getPositionKey(3, 2), champ2);
 
-        // Act
         champ1.fight(champMap);
 
-        // Assert
         if (champ1.isDefeated()) {
             assertEquals(2, champ2.getStrength());
         } else {
@@ -122,19 +116,17 @@ public class ChampTest {
         }
     }
 
+    // Tests the outcome of a fight between two Champs.
     @Test
     public void testFight() {
-        // Arrange
         Champ champ1 = new Champ(1, 3, 4);
         Champ champ2 = new Champ(2, 4, 4);
         HashMap<String, Champ> champMap = new HashMap<>();
         champMap.put(Mechanics.getPositionKey(3, 4), champ1);
         champMap.put(Mechanics.getPositionKey(4, 4), champ2);
 
-        // Act
         champ1.fight(champMap);
 
-        // Assert
         assertTrue(champ1.isDefeated() || champ2.isDefeated());
     }
 }
