@@ -1,10 +1,8 @@
 package com.example.survivalgames;
 
 import org.junit.jupiter.api.Test;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 

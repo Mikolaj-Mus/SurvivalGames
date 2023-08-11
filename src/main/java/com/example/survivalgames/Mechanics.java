@@ -17,7 +17,7 @@ public class Mechanics extends JPanel implements ActionListener {
     public static final int SCREEN_HEIGHT = 800;
     public static final int UNIT_SIZE = 80;
     public static final int DELAY = 100;
-    public static final int CHAMPS_NUM = 100;
+    public static final int CHAMPS_NUM = 50;
     public static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / (UNIT_SIZE * UNIT_SIZE);
     public static final int CELLS = (int) Math.sqrt(GAME_UNITS);
     private static HashMap<String, Champ> champMap = new HashMap<>();
@@ -27,7 +27,6 @@ public class Mechanics extends JPanel implements ActionListener {
 
     // Initializes the game mechanics, creates champions, and starts the game loop.
     Mechanics() {
-
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
         this.setFocusable(true);
